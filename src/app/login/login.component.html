@@ -1,0 +1,31 @@
+<div>
+    <div class="box" style="align-items: center; text-align: center;">
+      <div>
+        <div style="margin-bottom: 50PX; margin-top: -80px;" >
+            <h1>LOGIN</h1>
+        </div>
+      <div>
+      <form (ngSubmit)="login(formLogin);" #formLogin = "ngForm">
+        <div>
+          <div style="margin-bottom: 20PX;">
+              <label style="float: left;">User:</label>
+            <input  placeholder="Username" #txtUserName="ngModel" [(ngModel)] = "userName" name="userName" required>
+            <p *ngIf="txtUserName.touched && txtUserName.errors?.required">
+              Username is required
+            </p>
+          </div>
+          <div style="margin-bottom: 20PX; margin-top: -10px;">
+              <label style="float: left;">Password:</label>
+            <input placeholder="Password" type="password" #txtPassword = "ngModel" [(ngModel)] = "password" name="password" required>
+            <p *ngIf="txtPassword.touched && txtPassword.errors?.required">
+              Password is required
+            </p>
+          </div>
+          <div>
+              <p>{{notification}}</p>
+          </div>
+        </div>
+            <button class="btn btn-primary"[disabled]="formLogin.invalid">Login</button> 
+      </form>
+    </div>
+  </div>
