@@ -6,20 +6,32 @@
         </div>
       <div>
       <form (ngSubmit)="login(formLogin);" #formLogin = "ngForm">
-        <div>
-          <div style="margin-bottom: 20PX;">
-              <label style="float: left;">User:</label>
-            <input  placeholder="Username" #txtUserName="ngModel" [(ngModel)] = "userName" name="userName" required>
-            <p *ngIf="txtUserName.touched && txtUserName.errors?.required">
-              Username is required
-            </p>
+        <div class="d-flex flex-column">
+          <div class="p-2 d-flex col">
+            <div class="ml-auto p-2 col-4">
+              <label >User </label>
+            </div>
+            <div class="mr-auto p-2 col-8">
+              <input class="form-control" placeholder="Username" #txtUserName="ngModel" [(ngModel)] = "userName" name="userName" required>
+            </div> 
           </div>
-          <div style="margin-bottom: 20PX; margin-top: -10px;">
-              <label style="float: left;">Password:</label>
-            <input placeholder="Password" type="password" #txtPassword = "ngModel" [(ngModel)] = "password" name="password" required>
-            <p *ngIf="txtPassword.touched && txtPassword.errors?.required">
+          <div class="text-danger">
+            <label *ngIf="txtUserName.touched && txtUserName.errors?.required">
+              Username is required
+            </label>
+          </div>
+          <div class="p-2 d-flex col">
+            <div class="ml-auto p-2 col-4">
+              <label>Password</label>
+            </div>
+            <div class="mr-auto p-2 col-8">
+              <input class="form-control" placeholder="Password" type="password" #txtPassword = "ngModel" [(ngModel)] = "password" name="password" required>
+            </div>
+          </div>
+          <div class="text-danger">
+            <label *ngIf="txtPassword.touched && txtPassword.errors?.required">
               Password is required
-            </p>
+            </label>
           </div>
           <div>
               <p>{{notification}}</p>

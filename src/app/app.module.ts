@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import{HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { AddEmloyeeComponent } from './add-emloyee/add-emloyee.component';
 import { UpdateEmloyeeComponent } from './update-emloyee/update-emloyee.component';
 import { SearchEmloyeeComponent } from './search-emloyee/search-emloyee.component';
+import { HeaderPageComponent } from './header-page/header-page.component';
 
 
 @NgModule({
@@ -16,12 +18,14 @@ import { SearchEmloyeeComponent } from './search-emloyee/search-emloyee.componen
     LoginComponent,
     AddEmloyeeComponent,
     UpdateEmloyeeComponent,
-    SearchEmloyeeComponent
+    SearchEmloyeeComponent,
+    HeaderPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

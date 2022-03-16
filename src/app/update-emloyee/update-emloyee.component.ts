@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./update-emloyee.component.scss']
 })
 export class UpdateEmloyeeComponent implements OnInit {
-
+  titlePage='Sửa chữa thông tin nhân viên'
   constructor() { }
 
   ngOnInit(): void {
   }
+  update(formUpdate:any){
 
+  }
 }

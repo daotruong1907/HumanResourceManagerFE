@@ -11,11 +11,11 @@ export class LoginServiceService {
   constructor(private http: HttpClient) { }
 
   getData(params: LoginInterface) {
-    // return this.http.post<LoginInterface>('https://localhost:7105/api/Login/Login')
+    return this.http.post<boolean>('https://localhost:7105/api/Login/Login',params)
     // .pipe(
     //   map(res => {return res}),
     //   catchError((err)=> {return err})
     // )
-    return this.http.request('POST', 'https://localhost:7105/api/Login/Login', { body: params, responseType: 'json', });
+    //return this.http.request('POST', 'https://localhost:7105/api/Login/Login', { body: params, responseType: 'json', });
   }
 }

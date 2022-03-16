@@ -1,17 +1,58 @@
+<app-header-page [titlePage]="titlePage"></app-header-page>
 <div class="box">
-    <label>Họ tên:</label>
-    <input placeholder="Nguyễn Văn A"><br>
-    <label>Ngày sinh:</label>
-    <input type="date"><br>
-    <label>Giới tính:</label>
-    <select>
-        <option>Nam</option>
-        <option>Nữ</option>
-        <option>Khác</option>
-    </select><br>
-    <label>Số điện thoại</label>
-    <input placeholder="0961907516"><br>
-    <label>Email</label>
-    <input placeholder="daotruong1907@gmail.com"><br>
-    <button>Update</button>
+    <form (ngSubmit)="update(formUpdate);" #formUpdate = "ngForm">
+    <div class="p-2 d-flex col">
+        <div class="ml-auto p-2 col-4">
+            <label>Họ tên:</label>
+        </div>
+        <div class="mr-auto p-2 col-8">
+            <input class="form-control" type="text" placeholder="Nguyễn Văn A">
+        </div>
+    </div>
+    <div class="p-2 d-flex col">
+        <div class="ml-auto p-2 col-4">
+            <label>Ngày sinh:</label>
+        </div>
+        <div class="mr-auto p-2 col-8">
+            <input class="form-control" type="date">
+        </div>
+    </div>
+    <div class="p-2 d-flex col">
+        <div class="ml-auto p-2 col-4">
+            <label>Giới tính:</label>
+        </div>
+        <div class="mr-auto p-2 col-8">
+            <select>
+                <option>Nam</option>
+                <option>Nữ</option>
+                <option>Khác</option>
+            </select>
+        </div>
+    </div>
+    <div class="p-2 d-flex col">
+        <div class="ml-auto p-2 col-4">
+            <label>Giới tính:</label>
+        </div>
+        <div class="mr-auto p-2 col-8">
+            <input class="form-control" type="tel" placeholder="0961907516">
+        </div>
+    </div>
+    <div class="p-2 d-flex col">
+        <div class="ml-auto p-2 col-4">
+            <label>Email</label>
+        </div>
+        <div class="mr-auto p-2 col-8">
+            <input class="form-control" type="email" placeholder="daotruong1907@gmail.com">
+        </div>
+    </div>
+    <div class="p-2 d-flex col">
+        <div class="ml-auto p-2 col-3">
+            <button class="btn btn-primary">Update</button>
+        </div>
+        <div class="col-2"></div>
+        <div class="mr-auto p-2 col-7">
+            <button [routerLink]="['/search']" class="btn btn-secondary" [disabled]="formUpdate.invalid">Về trang quản trị</button>
+        </div>
+    </div>
+</form>
 </div>
