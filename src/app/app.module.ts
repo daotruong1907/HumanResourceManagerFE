@@ -10,17 +10,18 @@ import { AddEmloyeeComponent } from './add-emloyee/add-emloyee.component';
 import { UpdateEmloyeeComponent } from './update-emloyee/update-emloyee.component';
 import { SearchEmloyeeComponent } from './search-emloyee/search-emloyee.component';
 import { HeaderPageComponent } from './header-page/header-page.component';
-
+import { PopupConfirmComponentComponent } from './popup-confirm-component/popup-confirm-component.component';
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     LoginComponent,
     AddEmloyeeComponent,
     UpdateEmloyeeComponent,
     SearchEmloyeeComponent,
-    HeaderPageComponent
-  ],
+    HeaderPageComponent,
+    PopupConfirmComponentComponent
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule,

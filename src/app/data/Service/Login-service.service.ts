@@ -12,10 +12,5 @@ export class LoginServiceService {
 
   getData(params: LoginInterface) {
     return this.http.post<boolean>('https://localhost:7105/api/Login/Login',params)
-    // .pipe(
-    //   map(res => {return res}),
-    //   catchError((err)=> {return err})
-    // )
-    //return this.http.request('POST', 'https://localhost:7105/api/Login/Login', { body: params, responseType: 'json', });
   }
 }

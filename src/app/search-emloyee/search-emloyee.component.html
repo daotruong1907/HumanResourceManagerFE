@@ -1,13 +1,13 @@
 <app-header-page [titlePage]="titlePage"></app-header-page>
 <div>
-    <form (ngSubmit)="search(formSearch);" #formSearch = "ngForm"></form>
+    <form (ngSubmit)="search(formSearch);" #formSearch = "ngForm">
     <div class="d-flex">
         <div class="p-2 d-flex">
             <div class="ml-auto p-2">
                 <label >Ngày sinh từ </label>
             </div>
             <div class="mr-auto p-2">
-                <input class="form-control" type="date">
+                <input class="form-control" type="date" #txtFromBirthday="ngModel" [(ngModel)]="searchInterface.ParamSearchEmployee.FromBirthDay" name="fromBirthday" required >
             </div>  
         </div>
         <div class="p-2 d-flex">
@@ -15,7 +15,7 @@
                 <label >Đến </label>
             </div>
             <div class="mr-auto p-2">
-                <input class="form-control" type="date">
+                <input class="form-control" type="date" #txtToBirthday="ngModel" [(ngModel)]="searchInterface.ParamSearchEmployee.ToBirthDay" name="toBirthday" required>
             </div>
         </div>
         <div class="ml-auto p-2 d-flex">
@@ -23,11 +23,10 @@
                 <label >Giới tính </label>
             </div>
             <div class="mr-auto p-2">
-                <select>
-                    <option>Tất cả</option>
-                    <option>Nam</option>
-                    <option>Nữ</option>
-                    <option>Khác</option>
+                <select [(ngModel)]="searchInterface.ParamSearchEmployee.Sex" name="sex">
+                    <option value="ALL">Tất cả</option>
+                    <option value="MALE">Nam</option>
+                    <option value="FEMALE">Nữ</option>
                 </select>
             </div>
         </div>
@@ -38,18 +37,20 @@
                 <label>Tìm kiếm </label>
             </div>
             <div class="mr-auto p-2">
-                <input class="form-control" type="text" placeholder="Tìm theo Email, Họ tên">
+                <input class="form-control" type="text" placeholder="Tìm theo Email, Họ tên" #txtNameOrEmail="ngModel" [(ngModel)]="searchInterface.ParamSearchEmployee.NameOrEmail" name="nameOrEmail" required>
             </div>  
         </div>
         <div class="p-2">
-            <button class="btn btn-primary">Tìm</button>
+            <button class="btn btn-primary" type="submit">Tìm</button>
         </div>
         <div class="p-2">
             <button class="btn btn-primary" [routerLink]="['/add']">Thêm mới</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" >popup</button>
         </div>
     </div>
-    <label *ngIf="false">Thông báo</label>
-    <table class="table table-bordered" >
+</form>
+    <label *ngIf="notification" class="text-danger">{{notification}}</label>
+    <table class="table table-bordered text-center" >
         <thead class="thead-light">
             <tr class="text">
                 <th scope="col">ID</th>
@@ -61,7 +62,48 @@
                 <th scope="col">Sửa</th>
                 <th scope="col">Xóa</th>
             </tr>
+            <tr *ngFor="let employee of arrEmployee" class="text">
+                <th scope="col">{{employee.id}}</th>
+                <th scope="col">{{employee.name}}</th>
+                <th scope="col">{{employee.birthDay}}</th>
+                <th scope="col">{{employee.sex}}</th>
+                <th scope="col">{{employee.phoneNumber}}</th>
+                <th scope="col">{{employee.email}}</th>
+                <th scope="col"><button class="btn btn-warning" [routerLink]="['/update']">Sửa</button></th>
+                <th scope="col"><button class="btn btn-danger" (click)="deleteEmployee(employee.id)">Xóa</button></th>
+            </tr>
         </thead>
 
     </table>
+    <ul ng-if="vm.pager.pages.length" class="pagination">
+        <li ng-class="{disabled:vm.pager.currentPage === 1}">
+            <a ng-click="vm.setPage(1)">First</a>
+        </li>
+        <li ng-class="{disabled:vm.pager.currentPage === 1}">
+            <a ng-click="vm.setPage(vm.pager.currentPage - 1)">Previous</a>
+        </li>
+        <li ng-repeat="page in vm.pager.pages" ng-class="{active:vm.pager.currentPage === page}">
+            <a ng-click="vm.setPage(page)">1</a>
+        </li>                
+        <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
+            <a ng-click="vm.setPage(vm.pager.currentPage + 1)">Next</a>
+        </li>
+        <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
+            <a ng-click="vm.setPage(vm.pager.totalPages)">Last</a>
+        </li>
+    </ul>
 </div>
+<ng-template #content let-c="close" let-d="dismiss" *ngIf = "true"> 
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Hi there!</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <p>Hello, World!</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Save</button>
+    </div>
+  </ng-template>
+  
+  <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
