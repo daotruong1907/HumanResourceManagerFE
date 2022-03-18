@@ -7,7 +7,7 @@
                 <label >Ngày sinh từ </label>
             </div>
             <div class="mr-auto p-2">
-                <input class="form-control" type="date" #txtFromBirthday="ngModel" [(ngModel)]="searchInterface.ParamSearchEmployee.FromBirthDay" name="fromBirthday" required >
+                <input class="form-control" type="date" #txtFromBirthday="ngModel" [(ngModel)]="fromBirthday" (ngModelChange)="validateDate(formSearch)" name="fromBirthday" required >
             </div>  
         </div>
         <div class="p-2 d-flex">
@@ -15,7 +15,7 @@
                 <label >Đến </label>
             </div>
             <div class="mr-auto p-2">
-                <input class="form-control" type="date" #txtToBirthday="ngModel" [(ngModel)]="searchInterface.ParamSearchEmployee.ToBirthDay" name="toBirthday" required>
+                <input class="form-control" type="date" #txtToBirthday="ngModel" [(ngModel)]="toBirthday" (ngModelChange)="validateDate(formSearch)" name="toBirthday" required>
             </div>
         </div>
         <div class="ml-auto p-2 d-flex">
@@ -41,11 +41,10 @@
             </div>  
         </div>
         <div class="p-2">
-            <button class="btn btn-primary" type="submit">Tìm</button>
+            <button class="btn btn-primary" (click)="validateDate(formSearch,true)" type="submit">Tìm</button>
         </div>
         <div class="p-2">
             <button class="btn btn-primary" [routerLink]="['/add']">Thêm mới</button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" >popup</button>
         </div>
     </div>
 </form>
@@ -70,40 +69,24 @@
                 <th scope="col">{{employee.phoneNumber}}</th>
                 <th scope="col">{{employee.email}}</th>
                 <th scope="col"><button class="btn btn-warning" [routerLink]="['/update']">Sửa</button></th>
-                <th scope="col"><button class="btn btn-danger" (click)="deleteEmployee(employee.id)">Xóa</button></th>
+                <th scope="col"><button class="btn btn-danger" (click)="open(mymodal,employee.id)">Xóa</button></th>    
             </tr>
         </thead>
 
     </table>
-    <ul ng-if="vm.pager.pages.length" class="pagination">
-        <li ng-class="{disabled:vm.pager.currentPage === 1}">
-            <a ng-click="vm.setPage(1)">First</a>
-        </li>
-        <li ng-class="{disabled:vm.pager.currentPage === 1}">
-            <a ng-click="vm.setPage(vm.pager.currentPage - 1)">Previous</a>
-        </li>
-        <li ng-repeat="page in vm.pager.pages" ng-class="{active:vm.pager.currentPage === page}">
-            <a ng-click="vm.setPage(page)">1</a>
-        </li>                
-        <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
-            <a ng-click="vm.setPage(vm.pager.currentPage + 1)">Next</a>
-        </li>
-        <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
-            <a ng-click="vm.setPage(vm.pager.totalPages)">Last</a>
-        </li>
-    </ul>
-</div>
-<ng-template #content let-c="close" let-d="dismiss" *ngIf = "true"> 
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Hi there!</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
-    </div>
-    <div class="modal-body">
-      <p>Hello, World!</p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Save</button>
-    </div>
-  </ng-template>
-  
-  <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
+    
+    <ng-template #mymodal let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Thông báo</h4>
+          <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">X</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>{{modalConfirm?"Bạn có muốn xóa không?":deletedStatus?trueSave:falseSave}}</label>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')" *ngIf="modalConfirm">Close</button>
+          <button type="button" class="btn btn-danger" (click)="modal.close()">OK</button>
+        </div>
+    </ng-template>

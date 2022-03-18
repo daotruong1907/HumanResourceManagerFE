@@ -18,6 +18,6 @@ search(param:SearchInterface)
 }
 
 delete(param:number){
-  return this.http.delete("https://localhost:7105/api/EmployeeInformation/DeleteEmployee?"+param)
+  return this.http.delete<boolean>("https://localhost:7105/api/EmployeeInformation/DeleteEmployee?id="+param)
 }
 }

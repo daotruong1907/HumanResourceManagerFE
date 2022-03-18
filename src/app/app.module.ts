@@ -11,6 +11,7 @@ import { UpdateEmloyeeComponent } from './update-emloyee/update-emloyee.componen
 import { SearchEmloyeeComponent } from './search-emloyee/search-emloyee.component';
 import { HeaderPageComponent } from './header-page/header-page.component';
 import { PopupConfirmComponentComponent } from './popup-confirm-component/popup-confirm-component.component';
+import { CommonService } from './data/Service/common.service';
 
 @NgModule({
   declarations: [	
@@ -28,7 +29,7 @@ import { PopupConfirmComponentComponent } from './popup-confirm-component/popup-
     FormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [CommonService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
