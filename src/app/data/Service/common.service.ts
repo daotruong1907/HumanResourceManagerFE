@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 })
 export class CommonService {
   isLogged: boolean;
-
+  user: string;
   constructor(private router: Router) { }
 
 

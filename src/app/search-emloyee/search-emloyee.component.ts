@@ -60,6 +60,7 @@ export class SearchEmloyeeComponent implements OnInit {
     if (!this.commonSv.isLogged) {
       this.commonSv.redirectToLogin();
     }
+    
   }
   search(formSearch: any) {
     let emps: ResponseSearchEmployee[] = []
@@ -110,6 +111,7 @@ export class SearchEmloyeeComponent implements OnInit {
     // if(!this.searchInterface.ParamSearchEmployee.FromBirthDay){
     //   // Thông báo không đc để trống
     // }
+    //fixme: check date nhap ab/cd/efss
     this.searchInterface.ParamSearchEmployee.FromBirthDay = new Date(this.fromBirthday);
     this.searchInterface.ParamSearchEmployee.ToBirthDay = new Date(this.toBirthday);
     let ok = true;

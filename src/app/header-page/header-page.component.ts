@@ -17,6 +17,7 @@ export class HeaderPageComponent implements OnInit {
     const ok = confirm("Bạn có muốn đăng xuất không?");
     if (ok) {
       localStorage.removeItem('isLogged');
+      localStorage.removeItem('user');
       this.commomSv.redirectToLogin();
     }
   }

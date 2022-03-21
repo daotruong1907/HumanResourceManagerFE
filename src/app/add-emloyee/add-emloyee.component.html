@@ -1,12 +1,12 @@
 <app-header-page [titlePage]="titlePage"></app-header-page>
 <div class="box">
-    <form (ngSubmit)="add(formAdd);" #formAdd = "ngForm">
+    <form (ngSubmit)="add(formAdd,mymodal);" #formAdd = "ngForm">
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
             <label>Họ tên:</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <input class="form-control" type="text" placeholder="Nguyễn Văn A" #txtName = "ngModel" [(ngModel)] ="name" name="name" required>
+            <input class="form-control" type="text"  #txtName = "ngModel" [(ngModel)] ="requestAddClass.name" name="name" maxlength="25" required>
         </div>
     </div>
     <div class="text-danger">
@@ -19,31 +19,36 @@
             <label>Ngày sinh:</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <input class="form-control" type="date" #txtBirthday="ngModel" [(ngModel)]="birthday" name="birthday">
+            <input class="form-control" type="date" #txtBirthday="ngModel" [(ngModel)]="birthday" (ngModelChange)="validateDate()" (blur)="validateDate()" name="birthday" required>
         </div>
+    </div>
+    <div class="text-danger">
+        <label *ngIf="txtBirthday.touched && txtBirthday.errors?.required">
+            {{birthdayNote}}
+        </label>
     </div>
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
             <label>Giới tính:</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <select>
-                <option>Nam</option>
-                <option>Nữ</option>
+            <select [(ngModel)]="requestAddClass.sex" name="sex">
+                <option value="male">Nam</option>
+                <option value="female">Nữ</option>
             </select>
         </div>
     </div>
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
-            <label>Giới tính:</label>
+            <label>Số điện thoại:</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <input class="form-control" type="tel" placeholder="0961907516" #txtPhoneNumber = "ngModel" [(ngModel)]="phoneNumber" name="phonenumber" required>
+            <input class="form-control" type="tel" #txtPhoneNumber = "ngModel" [(ngModel)]="requestAddClass.phoneNumber" maxlength="11" name="phonenumber" required>
         </div>
     </div>
     <div class="text-danger">
         <label *ngIf="txtPhoneNumber.touched && txtPhoneNumber.errors?.required">
-            Phone Number is required
+            Phone Number is valid
         </label>
     </div>
     <div class="p-2 d-flex col">
@@ -51,20 +56,25 @@
             <label>Email</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <input class="form-control" type="email" placeholder="daotruong1907@gmail.com">
+            <input class="form-control" type="email" #txtEmail= "ngModel" [(ngModel)]="requestAddClass.email"  ngModel email="true" maxlength="35" name="email">
         </div>
+    </div>
+    <div class="text-danger">
+        <label *ngIf="txtEmail.touched && txtEmail.errors?.email">
+            Email not valid.
+        </label>
     </div>
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
             <label>Mật khẩu</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <input class="form-control" type="password" #txtPassword = "ngModel" [(ngModel)] ="password" name="password" required>
+            <input class="form-control" type="password" #txtPassword = "ngModel" [(ngModel)] ="requestAddClass.password" name="password" maxlength="50" required>
         </div>
     </div>
     <div class="text-danger">
         <label *ngIf="txtPassword.touched && txtPassword.errors?.required">
-            Password is required
+            Password not valid.
         </label>
     </div>
     <div class="p-2 d-flex col">
@@ -72,12 +82,17 @@
             <label>Nhập lại mật khẩu</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <input class="form-control" type="password" #txtRePassword = "ngModel" [(ngModel)] ="rePassword" name="rePassword" required>
+            <input class="form-control" type="password" #txtRePassword = "ngModel" [(ngModel)] ="rePassword" name="rePassword" maxlength="50" required>
         </div>
     </div>
     <div class="text-danger">
-        <label *ngIf="txtRePassword.touched && txtRePassword.errors?.required">
-            Password is required
+        <label *ngIf="txtRePassword.touched && txtRePassword.value != txtPassword.value">
+            The entered passwords do not match. Try again. 
+        </label>
+    </div>
+    <div class="text-danger">
+        <label>
+            {{notification}}
         </label>
     </div>
     <div class="p-2 d-flex col">
@@ -86,8 +101,23 @@
         </div>
         <div class="col-2"></div>
         <div class="mr-auto p-2 col-7">
-            <button [routerLink]="['/search']" class="btn btn-secondary" >Về trang quản trị</button>
+            <button (click) = "redirectToMain()" class="btn btn-secondary" >Về trang quản trị</button>
         </div>
     </div>
 </form>
 </div>
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Thông báo</h4>
+      <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">X</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label>{{modalConfirm?"Bạn có muốn thêm không?":addStatus?trueAdd:falseAdd}}</label>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')" *ngIf="modalConfirm">Close</button>
+      <button type="button" class="btn btn-primary" (click)="modal.close()">OK</button>
+    </div>
+</ng-template>
