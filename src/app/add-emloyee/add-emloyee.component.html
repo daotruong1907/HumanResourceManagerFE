@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="text-danger">
-        <label *ngIf="txtName.touched && txtName.errors?.required">
+        <label *ngIf="txtName.touched && txtName.errors?.required && txtName">
             Name is required
         </label>
     </div>
@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="text-danger">
-        <label *ngIf="txtBirthday.touched && txtBirthday.errors?.required">
+        <label *ngIf="txtBirthday.touched && birthdayNote">
             {{birthdayNote}}
         </label>
     </div>
@@ -47,7 +47,7 @@
         </div>
     </div>
     <div class="text-danger">
-        <label *ngIf="txtPhoneNumber.touched && txtPhoneNumber.errors?.required">
+        <label *ngIf="txtPhoneNumber.touched && txtPhoneNumber.errors?.required && txtPhoneNumber">
             Phone Number is valid
         </label>
     </div>
@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="text-danger">
-        <label *ngIf="txtEmail.touched && txtEmail.errors?.email">
+        <label *ngIf="txtEmail.touched && txtEmail.errors?.email && txtEmail">
             Email not valid.
         </label>
     </div>
@@ -73,7 +73,7 @@
         </div>
     </div>
     <div class="text-danger">
-        <label *ngIf="txtPassword.touched && txtPassword.errors?.required">
+        <label *ngIf="txtPassword.touched && txtPassword.errors?.required && txtPassword">
             Password not valid.
         </label>
     </div>
@@ -86,7 +86,7 @@
         </div>
     </div>
     <div class="text-danger">
-        <label *ngIf="txtRePassword.touched && txtRePassword.value != txtPassword.value">
+        <label *ngIf="txtRePassword.touched && txtRePassword.value != txtPassword.value && txtRePassword">
             The entered passwords do not match. Try again. 
         </label>
     </div>

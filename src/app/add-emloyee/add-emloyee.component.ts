@@ -74,6 +74,7 @@ export class AddEmloyeeComponent implements OnInit {
   // }
   validateDate() {
     let now = new Date
+    this.birthdayNote =''
     //let birthday = new Date(this.birthday)
     //Fixme: nhập ngày ab/cd/nmkl
     if(!this.birthday)
