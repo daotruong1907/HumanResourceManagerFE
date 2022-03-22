@@ -68,7 +68,7 @@
                 <th scope="col">{{employee.sex}}</th>
                 <th scope="col">{{employee.phoneNumber}}</th>
                 <th scope="col">{{employee.email}}</th>
-                <th scope="col"><button class="btn btn-warning" [routerLink]="['/update']">Sửa</button></th>
+                <th scope="col"><button class="btn btn-warning" [routerLink]="['/update',employee.id]">Sửa</button></th>
                 <th scope="col"><button class="btn btn-danger" (click)="open(mymodal,employee.id)">Xóa</button></th>    
             </tr>
         </thead>

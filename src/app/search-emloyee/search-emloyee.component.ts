@@ -7,6 +7,7 @@ import { HeaderPageComponent } from '../header-page/header-page.component';
 import { PopupConfirmComponentComponent } from '../popup-confirm-component/popup-confirm-component.component';
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from '../data/Service/common.service';
+import { PageServiceService } from '../data/Service/page-service.service';
 
 @Component({
   selector: 'app-search-emloyee',
@@ -15,7 +16,7 @@ import { CommonService } from '../data/Service/common.service';
 })
 export class SearchEmloyeeComponent implements OnInit {
   toBirthday: Date
-  fromBirthday : Date
+  fromBirthday: Date
   closeResult: string;
   modalbody = 'Bạn có muốn xóa không?'
   trueSave = 'Xóa thành công'
@@ -24,6 +25,13 @@ export class SearchEmloyeeComponent implements OnInit {
   titlePage = 'Quản trị nhân viên'
   notification = ''
   content = false
+  totalItem: number
+  currentPage: number
+  startPage: number
+
+  endPage: number
+  startIndex: number
+  endIndex: number
   arrEmployee: ResponseSearchEmployee[]
   //  =[
   //   {Id:1 , "Name":"Dao Van Truong", "BirthDay":"23","Sex":"male","PhoneNumber":"0961907516","Email":"daotruong1907@gmail.com"},
@@ -31,7 +39,7 @@ export class SearchEmloyeeComponent implements OnInit {
   //   {Id:3 , "Name":"Dao Van Truong", "BirthDay":"23","Sex":"male","PhoneNumber":"0961907516","Email":"daotruong1907@gmail.com"},
   //   {Id:4 , "Name":"Dao Van Truong", "BirthDay":"23","Sex":"male","PhoneNumber":"0961907516","Email":"daotruong1907@gmail.com"},
   // ]
-  
+
   columns: { title: string, field: string, isButtonColumn?: boolean }[] = [
 
   ];
@@ -41,7 +49,7 @@ export class SearchEmloyeeComponent implements OnInit {
 
   searchInterface: SearchInterface = {
     PageDto: {
-      ItemQuantityInPage: 5,
+      ItemQuantityInPage: 10,
       PageQuantity: 1
     },
     ParamSearchEmployee: {
@@ -52,7 +60,13 @@ export class SearchEmloyeeComponent implements OnInit {
       ToBirthDay: undefined
     }
   };
-  constructor(private sv: SearchServiceService, config: NgbModalConfig, private modalService: NgbModal, private commonSv: CommonService) {
+  constructor(
+    private sv: SearchServiceService,
+    config: NgbModalConfig,
+    private modalService: NgbModal,
+    private commonSv: CommonService,
+    private page: PageServiceService,
+  ) {
     config.backdrop = 'static';
     config.keyboard = false;
   }
@@ -60,7 +74,7 @@ export class SearchEmloyeeComponent implements OnInit {
     if (!this.commonSv.isLogged) {
       this.commonSv.redirectToLogin();
     }
-    
+
   }
   search(formSearch: any) {
     let emps: ResponseSearchEmployee[] = []
@@ -96,7 +110,7 @@ export class SearchEmloyeeComponent implements OnInit {
     });
     this.arrEmployee = this.arrEmployee.filter(x => x.id != id)
   }
- // this.modalConfirm = true;
+  // this.modalConfirm = true;
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -107,7 +121,7 @@ export class SearchEmloyeeComponent implements OnInit {
     }
   }
 
-  validateDate(formSearch:any,callAPI?: boolean) {
+  validateDate(formSearch: any, callAPI?: boolean) {
     // if(!this.searchInterface.ParamSearchEmployee.FromBirthDay){
     //   // Thông báo không đc để trống
     // }
@@ -119,11 +133,11 @@ export class SearchEmloyeeComponent implements OnInit {
     let listResponse = []
     if (this.searchInterface.ParamSearchEmployee.FromBirthDay && this.searchInterface.ParamSearchEmployee.ToBirthDay) {
       if (this.searchInterface.ParamSearchEmployee.FromBirthDay > this.searchInterface.ParamSearchEmployee.ToBirthDay) {
-        listResponse.push('Từ ngày không thể lớn hơn đến ngày') 
+        listResponse.push('Từ ngày không thể lớn hơn đến ngày')
         ok = false;
       }
       if (this.searchInterface.ParamSearchEmployee.FromBirthDay >= now || this.searchInterface.ParamSearchEmployee.ToBirthDay >= now) {
-        listResponse.push('Không thể nhập ngày lớn hơn ngày hiện tại') 
+        listResponse.push('Không thể nhập ngày lớn hơn ngày hiện tại')
         ok = false;
       }
     }
@@ -142,5 +156,57 @@ export class SearchEmloyeeComponent implements OnInit {
       // Gọi api tìm kiếm
       this.search(formSearch)
     }
+  }
+
+  pagination(pageSize: number, totalPage: number, currentPage: number) {
+    this.page.getTotalItem().subscribe(res => { this.totalItem = res })
+    this.searchInterface.PageDto.ItemQuantityInPage = 10
+    this.searchInterface.PageDto.PageQuantity = Math.ceil(this.totalItem / this.searchInterface.PageDto.ItemQuantityInPage)
+    this.sv.search(this.searchInterface)
+
+  }
+
+  getTotalItem(){
+    this.sv.search(this.searchInterface)
+  }
+
+  getPage(pageSize: number, totalItem: number, currentPage: number) {
+    currentPage = currentPage || 1
+    pageSize = pageSize || 10
+    let totalPage = Math.ceil(totalItem / pageSize)
+    let firstPage = 1
+    let lastPage = Math.ceil(totalItem / pageSize)
+    var startPage, endPage
+    this.startIndex = (currentPage - 1) * pageSize
+    this.endIndex = Math.min((this.startIndex + pageSize - 1), (totalItem - 1))
+    if (totalPage <= 3) {
+      startPage = 1
+      endPage = totalPage
+    }
+    else
+      if (currentPage <= 2) {
+        startPage = 1
+        endPage = totalPage
+      }
+      else if (currentPage + 2 > totalPage) {
+        startPage = totalPage - 2
+        endPage = totalPage
+      }
+      else {
+        startPage = currentPage - 1
+        endPage = currentPage + 1
+      }
+    var page = [startPage, endPage + 1]
+    return {
+      totalItems: totalItem,
+      currentPage: currentPage,
+      pageSize: pageSize,
+      totalPages: totalPage,
+      startPage: startPage,
+      endPage: endPage,
+      startIndex: this.startIndex,
+      endIndex: this.endIndex,
+      page: this.page
+    };
   }
 }

@@ -1,57 +1,98 @@
 <app-header-page [titlePage]="titlePage"></app-header-page>
 <div class="box">
-    <form (ngSubmit)="update(formUpdate);" #formUpdate = "ngForm">
+    <form (ngSubmit)="update(formUpdate,mymodal);" #formUpdate = "ngForm">
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
             <label>Họ tên:</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <input class="form-control" type="text" placeholder="Nguyễn Văn A">
+            <input class="form-control" type="text"  #txtName = "ngModel" [(ngModel)] ="paramUpdateEmployeeDto.name" name="name" maxlength="25" required>
         </div>
+    </div>
+    <div class="text-danger">
+        <label *ngIf="txtName.touched && txtName.errors?.required && txtName">
+            Name is required
+        </label>
     </div>
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
             <label>Ngày sinh:</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <input class="form-control" type="date">
+            <input class="form-control" type="date" #txtBirthday="ngModel" [ngModel]="paramUpdateEmployeeDto.birthDay|date:'yyyy-MM-dd'" (ngModelChange)="validateDate(txtBirthday)" (blur)="validateDate(txtBirthday)" name="birthday" required>
         </div>
+    </div>
+    <div class="text-danger">
+        <label *ngIf="txtBirthday.touched && birthdayNote && !isBirthDay">
+            {{birthdayNote}}
+        </label>
     </div>
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
             <label>Giới tính:</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <select>
-                <option>Nam</option>
-                <option>Nữ</option>
+            <select [(ngModel)]="paramUpdateEmployeeDto.sex" name="sex">
+                <option value="male">Nam</option>
+                <option value="female">Nữ</option>
             </select>
         </div>
     </div>
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
-            <label>Giới tính:</label>
+            <label>Số điện thoại:</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <input class="form-control" type="tel" placeholder="0961907516">
+            <input class="form-control" type="tel" #txtPhoneNumber = "ngModel" [(ngModel)]="paramUpdateEmployeeDto.phoneNumber" maxlength="11" name="phonenumber" required>
         </div>
+    </div>
+    <div class="text-danger">
+        <label *ngIf="txtPhoneNumber.touched && txtPhoneNumber.errors?.required && txtPhoneNumber">
+            Phone Number is valid
+        </label>
     </div>
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
             <label>Email</label>
         </div>
         <div class="mr-auto p-2 col-8">
-            <input class="form-control" type="email" placeholder="daotruong1907@gmail.com">
+            <input class="form-control" type="email" #txtEmail= "ngModel" [(ngModel)]="paramUpdateEmployeeDto.email"  ngModel email="true" maxlength="35" name="email">
         </div>
+    </div>
+    <div class="text-danger">
+        <label *ngIf="txtEmail.touched && txtEmail.errors?.email && txtEmail">
+            Email not valid.
+        </label>
+    </div>
+    
+    <div class="text-danger">
+        <label>
+            {{notification}}
+        </label>
     </div>
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-3">
-            <button class="btn btn-primary">Update</button>
+            <button class="btn btn-primary" [disabled]="formUpdate.invalid">Update</button>
         </div>
         <div class="col-2"></div>
         <div class="mr-auto p-2 col-7">
-            <button [routerLink]="['/search']" class="btn btn-secondary" [disabled]="formUpdate.invalid">Về trang quản trị</button>
+            <button (click) = "redirectToMain()" class="btn btn-secondary" >Về trang quản trị</button>
         </div>
     </div>
 </form>
 </div>
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Thông báo</h4>
+      <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">X</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label>{{modalConfirm?"Bạn có muốn sửa không?":addStatus?trueAdd:falseAdd}}</label>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')" *ngIf="modalConfirm">Close</button>
+      <button type="button" class="btn btn-primary" (click)="modal.close()">OK</button>
+    </div>
+</ng-template>

@@ -9,7 +9,7 @@ import { UpdateEmloyeeComponent } from './update-emloyee/update-emloyee.componen
 const routes: Routes = [
   {path:'', component: LoginComponent},
   {path:'add',component:AddEmloyeeComponent},
-  {path:'update',component:UpdateEmloyeeComponent},
+  {path:'update/:id',component:UpdateEmloyeeComponent},
   {path:'search',component:SearchEmloyeeComponent},
   {path:'modal',component:PopupConfirmComponentComponent}
 ];

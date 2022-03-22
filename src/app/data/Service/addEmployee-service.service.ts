@@ -10,8 +10,7 @@ export class AddEmployeeServiceService {
 
   constructor(private http: HttpClient) { }
 
-  add(params: RequestAddClass)
-  {
+  add(params: RequestAddClass) {
     return this.http.post<ResponseAddClass>("https://localhost:7105/api/EmployeeInformation/AddEmployee", params)
   }
 }
