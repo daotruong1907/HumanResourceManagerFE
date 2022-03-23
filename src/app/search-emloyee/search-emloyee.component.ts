@@ -27,14 +27,9 @@ export class SearchEmloyeeComponent implements OnInit {
   trueSearch = true
   eraserId ?:number
   content = false
-  totalItem: number
-  currentPage: number
-  startPage: number
-
-  endPage: number
-  startIndex: number
-  endIndex: number
   arrEmployee: ResponseSearchEmployee[]
+  p: number = 1;
+  count: number = 1;
 
   columns: { title: string, field: string, isButtonColumn?: boolean }[] = [
     { title: 'STT', field: '{{i+1}}', isButtonColumn: false },
@@ -133,35 +128,8 @@ export class SearchEmloyeeComponent implements OnInit {
     }
   }
   isBirthDay = true
-  // validateFromDate(date:any) {
-  //   let now = new Date
-  //   this.notification = ''
-  //   //let birthday = new Date(this.birthday)
-  //   //Fixme: nhập ngày ab/cd/nmkl
-  //   if (!date.value) {
-  //     this.notification = 'Không đúng định dạng ngày';
-  //     this.isBirthDay = false
-  //   }
-  //   else {
-  //     this.searchInterface.ParamSearchEmployee.FromBirthDay = new Date(date.value)
-  //     if (this.searchInterface.ParamSearchEmployee.FromBirthDay >= now) {
-  //       this.notification = 'Không thể nhập ngày lớn hơn ngày hiện tại';
-  //       this.isBirthDay = false
-  //     }
-  //     else {
-  //       var diff = Math.abs(now.getTime() - this.searchInterface.ParamSearchEmployee.FromBirthDay.getTime());
-  //       diff = (diff / (1000 * 60 * 60 * 24 * 365))
-  //       if (diff < 18) {
-  //         this.notification = 'Chưa đủ 18 tuổi';
-  //         this.isBirthDay = false
-  //       }
-  //     }
-  //   }
-  // }
+ 
   validateDate(formSearch: any, fromDate?: any, toDate?: any, callAPI?:boolean) {
-    // if(!this.searchInterface.ParamSearchEmployee.FromBirthDay){
-    //   // Thông báo không đc để trống
-    // }
     //fixme: check date nhap ab/cd/efss
     let listResponse = []
     let ok = true;
@@ -224,58 +192,5 @@ export class SearchEmloyeeComponent implements OnInit {
       }
     }
     this.notification = listResponse.join(',')
-  }
-
-
-  pagination(currentPage: number) {
-    this.page.getTotalItem().subscribe(res => { this.totalItem = res })
-    this.searchInterface.PageDto.ItemQuantityInPage = 10
-    this.searchInterface.PageDto.PageQuantity = Math.ceil(this.totalItem / this.searchInterface.PageDto.ItemQuantityInPage)
-    this.getPage(this.searchInterface.PageDto.ItemQuantityInPage, this.totalItem, currentPage)
-  }
-
-  getTotalItem() {
-    this.sv.search(this.searchInterface)
-  }
-
-  getPage(pageSize: number, totalItem: number, currentPage: number) {
-    currentPage = currentPage || 1
-    pageSize = pageSize || 10
-    let totalPage = Math.ceil(totalItem / pageSize)
-    let firstPage = 1
-    let lastPage = Math.ceil(totalItem / pageSize)
-    var startPage, endPage
-
-    if (totalPage <= 3) {
-      startPage = 1
-      endPage = totalPage
-    }
-    else
-      if (currentPage <= 2) {
-        startPage = 1
-        endPage = totalPage
-      }
-      else if (currentPage + 2 > totalPage) {
-        startPage = totalPage - 2
-        endPage = totalPage
-      }
-      else {
-        startPage = currentPage - 1
-        endPage = currentPage + 1
-      }
-    var page = [startPage, endPage + 1]
-    this.startIndex = (currentPage - 1) * pageSize
-    this.endIndex = Math.min((this.startIndex + pageSize - 1), (totalItem - 1))
-    return {
-      totalItems: totalItem,
-      currentPage: currentPage,
-      pageSize: pageSize,
-      totalPages: totalPage,
-      startPage: startPage,
-      endPage: endPage,
-      startIndex: this.startIndex,
-      endIndex: this.endIndex,
-      page: this.page
-    };
   }
 }

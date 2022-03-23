@@ -76,7 +76,7 @@
                 <th scope="col">Sửa</th>
                 <th scope="col">Xóa</th>
             </tr>
-            <tr *ngFor="let employee of arrEmployee ; index as i" class="text">
+            <tr *ngFor="let employee of arrEmployee | paginate: { itemsPerPage: count, currentPage: p } ; index as i " class="text">
                 <th scope="col">{{i+1}}</th>
                 <th scope="col">{{employee.name}}</th>
                 <th scope="col">{{employee.birthDay|date:'dd-MM-yyyy'}}</th>
@@ -89,19 +89,10 @@
         </thead>
 
     </table>
-    <div class="btn-toolbar d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group me-2" role="group" aria-label="First group">
-            <button type="button" class="btn btn-secondary" (click)="pagination(1)" value="1">First</button>
-            <button type="button" class="btn btn-secondary"><<</button>
-                    <button type="button" class="btn btn-secondary">Prev</button>
-                    <button type="button" class="btn btn-secondary">1</button>
-                    <button type="button" class="btn btn-secondary">2</button>
-                    <button type="button" class="btn btn-secondary">3</button>
-                    <button type="button" class="btn btn-secondary">Next</button>
-                    <button type="button" class="btn btn-secondary">>></button>
-                    <button type="button" class="btn btn-secondary">Last</button>
-        </div>
-    </div>
+    <div class="text-center">
+        <pagination-controls *ngIf="arrEmployee.length > 0" (pageChange)="p = $event"></pagination-controls>
+      </div>
+    
     <ng-template #mymodal let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Thông báo</h4>

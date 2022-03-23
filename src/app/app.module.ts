@@ -12,6 +12,7 @@ import { SearchEmloyeeComponent } from './search-emloyee/search-emloyee.componen
 import { HeaderPageComponent } from './header-page/header-page.component';
 import { PopupConfirmComponentComponent } from './popup-confirm-component/popup-confirm-component.component';
 import { CommonService } from './data/Service/common.service';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [	
@@ -21,13 +22,15 @@ import { CommonService } from './data/Service/common.service';
     UpdateEmloyeeComponent,
     SearchEmloyeeComponent,
     HeaderPageComponent,
-    PopupConfirmComponentComponent
+    PopupConfirmComponentComponent,
+    
    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    NgxPaginationModule
   ],
   providers: [CommonService],
   bootstrap: [AppComponent]
