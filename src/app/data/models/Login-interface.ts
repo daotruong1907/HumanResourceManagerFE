@@ -3,6 +3,6 @@ export class LoginInterface {
     password:string
 }
 export class Responselogin {
-    name:string
+    id:number
     isSuccess:boolean
 }

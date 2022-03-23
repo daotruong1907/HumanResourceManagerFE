@@ -6,7 +6,7 @@ export interface SearchInterface {
     NameOrEmail: string
     FromBirthDay?: Date
     ToBirthDay?: Date
-    Sex: string
+    Sex: number
     PhoneNumber: string
 }
 export class PageDto {

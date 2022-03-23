@@ -1,58 +1,73 @@
 <app-header-page [titlePage]="titlePage"></app-header-page>
 <div>
-    <form (ngSubmit)="search(formSearch);" #formSearch = "ngForm">
-    <div class="d-flex">
-        <div class="p-2 d-flex">
-            <div class="ml-auto p-2">
-                <label >Ngày sinh từ </label>
+    <form (ngSubmit)="search(formSearch);" #formSearch="ngForm">
+        <div class="d-flex">
+            <div class="p-2 d-flex">
+                <div class="ml-auto p-2">
+                    <label>Ngày sinh từ </label>
+                </div>
+                <div class="mr-auto p-2">
+                    <input class="form-control" type="date" #txtFromBirthday="ngModel" [ngModel]="fromBirthday"
+                        (ngModelChange)="validateDate(formSearch,txtFromBirthday,txtToBirthday)"
+                        (blur)="validateDate(formSearch,txtFromBirthday,txtToBirthday)" name="fromBirthday" required>
+                </div>
             </div>
-            <div class="mr-auto p-2">
-                <input class="form-control" type="date" #txtFromBirthday="ngModel" [(ngModel)]="fromBirthday" (ngModelChange)="validateDate(formSearch)" name="fromBirthday" required >
-            </div>  
-        </div>
-        <div class="p-2 d-flex">
-            <div class="ml-auto p-2">
-                <label >Đến </label>
+
+            <div class="p-2 d-flex">
+                <div class="ml-auto p-2">
+                    <label>Đến </label>
+                </div>
+                <div class="mr-auto p-2">
+                    <input class="form-control" type="date" #txtToBirthday="ngModel" [ngModel]="toBirthday"
+                        (ngModelChange)="validateDate(formSearch,txtFromBirthday,txtToBirthday)"
+                        (blur)="validateDate(formSearch,txtFromBirthday,txtToBirthday)" name="toBirthday" required>
+                </div>
             </div>
-            <div class="mr-auto p-2">
-                <input class="form-control" type="date" #txtToBirthday="ngModel" [(ngModel)]="toBirthday" (ngModelChange)="validateDate(formSearch)" name="toBirthday" required>
+            <div class="ml-auto p-2 d-flex">
+                <div class="ml-auto p-2">
+                    <label>Giới tính </label>
+                </div>
+                <div class="mr-auto p-2">
+                    <select [(ngModel)]="searchInterface.ParamSearchEmployee.Sex" name="sex">
+                        <option value=3>Tất cả</option>
+                        <option value=0>Nam</option>
+                        <option value=1>Nữ</option>
+                        <option value=2>Khác</option>
+                    </select>
+                </div>
             </div>
         </div>
-        <div class="ml-auto p-2 d-flex">
-            <div class="ml-auto p-2">
-                <label >Giới tính </label>
+        <div class="text-danger">
+            <label
+                *ngIf="(txtToBirthday.touched && txtToBirthday.errors?.required && notification && isBirthDay)||( txtFromBirthday.errors?.required && txtFromBirthday.touched && notification && isBirthDay)">
+                {{notification}}
+            </label>
+        </div>
+        <div class="d-flex">
+            <div class="mr-auto p-2 d-flex">
+                <div class="ml-auto p-2">
+                    <label>Tìm kiếm </label>
+                </div>
+                <div class="mr-auto p-2">
+                    <input class="form-control" type="text" placeholder="Tìm theo Email, Họ tên"
+                        #txtNameOrEmail="ngModel" [(ngModel)]="searchInterface.ParamSearchEmployee.NameOrEmail"
+                        name="nameOrEmail" required>
+                </div>
             </div>
-            <div class="mr-auto p-2">
-                <select [(ngModel)]="searchInterface.ParamSearchEmployee.Sex" name="sex">
-                    <option value="ALL">Tất cả</option>
-                    <option value="MALE">Nam</option>
-                    <option value="FEMALE">Nữ</option>
-                </select>
+            <div class="p-2">
+                <button class="btn btn-primary" [disabled]="notification && !trueSearch" (click)="validateDate(formSearch,true)"
+                    type="submit">Tìm</button>
+            </div>
+            <div class="p-2">
+                <button class="btn btn-primary" [routerLink]="['/add']">Thêm mới</button>
             </div>
         </div>
-    </div>
-    <div class="d-flex">
-        <div class="mr-auto p-2 d-flex">
-            <div class="ml-auto p-2">
-                <label>Tìm kiếm </label>
-            </div>
-            <div class="mr-auto p-2">
-                <input class="form-control" type="text" placeholder="Tìm theo Email, Họ tên" #txtNameOrEmail="ngModel" [(ngModel)]="searchInterface.ParamSearchEmployee.NameOrEmail" name="nameOrEmail" required>
-            </div>  
-        </div>
-        <div class="p-2">
-            <button class="btn btn-primary" (click)="validateDate(formSearch,true)" type="submit">Tìm</button>
-        </div>
-        <div class="p-2">
-            <button class="btn btn-primary" [routerLink]="['/add']">Thêm mới</button>
-        </div>
-    </div>
-</form>
+    </form>
     <label *ngIf="notification" class="text-danger">{{notification}}</label>
-    <table class="table table-bordered text-center" >
+    <table class="table table-bordered text-center">
         <thead class="thead-light">
             <tr class="text">
-                <th scope="col">ID</th>
+                <th scope="col">STT</th>
                 <th scope="col">Họ tên</th>
                 <th scope="col">Ngày sinh</th>
                 <th scope="col">Giới tính</th>
@@ -61,32 +76,45 @@
                 <th scope="col">Sửa</th>
                 <th scope="col">Xóa</th>
             </tr>
-            <tr *ngFor="let employee of arrEmployee" class="text">
-                <th scope="col">{{employee.id}}</th>
+            <tr *ngFor="let employee of arrEmployee ; index as i" class="text">
+                <th scope="col">{{i+1}}</th>
                 <th scope="col">{{employee.name}}</th>
-                <th scope="col">{{employee.birthDay}}</th>
-                <th scope="col">{{employee.sex}}</th>
+                <th scope="col">{{employee.birthDay|date:'dd-MM-yyyy'}}</th>
+                <th scope="col">{{employee.sex=='0'?'Nam':1?'Nữ':2?'LGBT':''}}</th>
                 <th scope="col">{{employee.phoneNumber}}</th>
                 <th scope="col">{{employee.email}}</th>
                 <th scope="col"><button class="btn btn-warning" [routerLink]="['/update',employee.id]">Sửa</button></th>
-                <th scope="col"><button class="btn btn-danger" (click)="open(mymodal,employee.id)">Xóa</button></th>    
+                <th scope="col"><button class="btn btn-danger" (click)="open(mymodal,employee.id)">Xóa</button></th>
             </tr>
         </thead>
 
     </table>
-    
+    <div class="btn-toolbar d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group me-2" role="group" aria-label="First group">
+            <button type="button" class="btn btn-secondary" (click)="pagination(1)" value="1">First</button>
+            <button type="button" class="btn btn-secondary"><<</button>
+                    <button type="button" class="btn btn-secondary">Prev</button>
+                    <button type="button" class="btn btn-secondary">1</button>
+                    <button type="button" class="btn btn-secondary">2</button>
+                    <button type="button" class="btn btn-secondary">3</button>
+                    <button type="button" class="btn btn-secondary">Next</button>
+                    <button type="button" class="btn btn-secondary">>></button>
+                    <button type="button" class="btn btn-secondary">Last</button>
+        </div>
+    </div>
     <ng-template #mymodal let-modal>
         <div class="modal-header">
-          <h4 class="modal-title" id="modal-basic-title">Thông báo</h4>
-          <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
-            <span aria-hidden="true">X</span>
-          </button>
+            <h4 class="modal-title" id="modal-basic-title">Thông báo</h4>
+            <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">X</span>
+            </button>
         </div>
         <div class="modal-body">
-          <label>{{modalConfirm?"Bạn có muốn xóa không?":deletedStatus?trueSave:falseSave}}</label>
+            <label>{{modalConfirm?"Bạn có muốn xóa không?":deletedStatus?trueSave:falseSave}}</label>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')" *ngIf="modalConfirm">Close</button>
-          <button type="button" class="btn btn-danger" (click)="modal.close()">OK</button>
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')"
+                *ngIf="modalConfirm">Close</button>
+            <button type="button" class="btn btn-danger" (click)="modal.close()">Đồng ý</button>
         </div>
     </ng-template>

@@ -1,12 +1,12 @@
 export class RequestAddClass {
     name: string
     birthDay?: Date
-    sex: string
+    sex?: number
     phoneNumber: string
-    email: string
+    email?: string
     password: string
-    creator: string
+    creatorId: number
     createAt?: Date
-    repairer: string
+    repairerId?: number
     updateAt?: Date
 }

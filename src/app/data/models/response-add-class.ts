@@ -11,15 +11,15 @@ export class ResponseAddEmployee {
     phoneNumber: string
     email: string
     password: string
-    creator: string
+    creatorId: string
     createAt: Date
-    repairer: string
+    repairerId: string
     updateAt: Date
 }
 export class ResponseAddAccount {
     id: 0
     passWord: string
-    creator: string
+    creatorId: string
     createAt: Date
     updateAt: Date
 }

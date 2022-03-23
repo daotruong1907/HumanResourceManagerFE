@@ -31,13 +31,13 @@ export class AddEmloyeeComponent implements OnInit {
     {
       name: '',
       birthDay: undefined,
-      sex: 'male',
+      sex: 0,
       phoneNumber: '',
       email: '',
       password: '',
-      creator: '',
+      creatorId: 0,
       createAt: new Date,
-      repairer: '',
+      repairerId: 0,
       updateAt: new Date,
     }
   responseAddClass: ResponseAddClass
@@ -47,17 +47,17 @@ export class AddEmloyeeComponent implements OnInit {
     {
       this.commonSv.redirectToLogin();
     }
-    if(this.commonSv.user != null){
-      this.requestAddClass.creator = this.commonSv.user;
+    if(this.commonSv.Id != null){
+      this.requestAddClass.creatorId = this.commonSv.Id;
     }
   }
   validatePass(){
     if(this.password && this.rePassword )
     {
-      this.passNote = "The entered passwords do not match. Try again."
+      this.passNote = "Mật khẩu không khớp"
     }
     else{
-      this.passNote = "Password is required."
+      this.passNote = "Không được để trống"
     }
   }
   public numbersOnlyValidator(event: any) {

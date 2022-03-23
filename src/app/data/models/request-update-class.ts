@@ -2,7 +2,7 @@ export class DataUpdateClass {
     id: number
     name: string
     birthDay?: Date
-    sex: string
+    sex?: string
     phoneNumber: string
     email: string
 }
@@ -10,10 +10,10 @@ export class ParamUpdateEmployeeDto {
     id: number
     name: string
     birthDay?: Date
-    sex: string
+    sex?: string
     phoneNumber: string
     email: string
-    repairer: string
+    repairerId: number
     updateAt?: Date
 }
 export class ResponseUpdateEmployee {

@@ -17,8 +17,8 @@ export class SearchServiceService {
     return this.http.post<ResponseSearchInterface>("https://localhost:7105/api/EmployeeInformation/SearchEmployee", param)
   }
 
-  delete(param: number) {
-    return this.http.delete<boolean>("https://localhost:7105/api/EmployeeInformation/DeleteEmployee?id=" + param)
+  delete(id: number, eraserId?:number) {
+    return this.http.delete<boolean>("https://localhost:7105/api/EmployeeInformation/DeleteEmployee?id="+id+"&eraserId="+eraserId)
   }
   getUserById(id: number) {
     return this.http.get<DataUpdateClass>("https://localhost:7105/api/EmployeeInformation/GetEmployeeeById?id=" + id)

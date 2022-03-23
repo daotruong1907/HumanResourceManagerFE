@@ -17,7 +17,7 @@
           </div>
           <div class="text-danger">
             <label *ngIf="txtUserName.touched && txtUserName.errors?.required">
-              Username is required
+              Không được để trống
             </label>
           </div>
           <div class="p-2 d-flex col">
@@ -30,11 +30,11 @@
           </div>
           <div class="text-danger">
             <label *ngIf="txtPassword.touched && txtPassword.errors?.required">
-              Password is required
+              Không được để trống
             </label>
           </div>
           <div>
-              <p class="text-danger">{{notification}}</p>
+              <p class="text-danger" *ngIf="!txtPassword.errors?.required && !txtUserName.errors?.required">{{notification}}</p>
           </div>
         </div>
             <button class="btn btn-primary" [disabled]="formLogin.invalid">Login</button> 

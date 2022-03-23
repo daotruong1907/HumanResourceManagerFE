@@ -27,7 +27,7 @@ export class UpdateEmloyeeComponent implements OnInit {
     config.keyboard = false;
   }
   birthday?: Date
-  isBirthDay= true
+  isBirthDay:boolean = true
   password: string = ''
   rePassword: string = ''
   notification = ''
@@ -45,7 +45,7 @@ export class UpdateEmloyeeComponent implements OnInit {
       sex: 'male',
       phoneNumber: '',
       email: '',
-      repairer: '',
+      repairerId: 0,
       updateAt: undefined,
     }
   responseUpdateEmployee: ResponseUpdateEmployee
@@ -54,8 +54,8 @@ export class UpdateEmloyeeComponent implements OnInit {
     if (!this.commonSv.isLogged) {
       this.commonSv.redirectToLogin();
     }
-    if (this.commonSv.user != null) {
-      this.paramUpdateEmployeeDto.repairer = this.commonSv.user;
+    if (this.commonSv.Id != null) {
+      this.paramUpdateEmployeeDto.repairerId = this.commonSv.Id;
     }
     this.route.params
     .subscribe((search)  => this.paramUpdateEmployeeDto.id = search.id);
@@ -64,8 +64,6 @@ export class UpdateEmloyeeComponent implements OnInit {
       this.paramUpdateEmployeeDto.name = res.name;
       this.paramUpdateEmployeeDto.sex = res.sex;
       this.paramUpdateEmployeeDto.birthDay = new Date(res.birthDay as any);
-      console.log(this.paramUpdateEmployeeDto.birthDay);
-      
       this.paramUpdateEmployeeDto.email = res.email;
       this.paramUpdateEmployeeDto.phoneNumber = res.phoneNumber;
     });
@@ -82,7 +80,7 @@ export class UpdateEmloyeeComponent implements OnInit {
     //let birthday = new Date(this.birthday)
     //Fixme: nhập ngày ab/cd/nmkl
     if (!date.value) {
-      this.birthdayNote = 'Birthday is valid';
+      this.birthdayNote = 'Không đúng định dạng';
       this.isBirthDay = false
     }
     else {

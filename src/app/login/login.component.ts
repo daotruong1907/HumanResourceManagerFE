@@ -26,14 +26,13 @@ export class LoginComponent implements OnInit {
     this.sv.getData(this.loginModel).subscribe(res => {
       if (res.isSuccess === true) {
         this.commonSv.isLogged = res.isSuccess;
-        this.commonSv.user = res.name;
+        this.commonSv.Id = res.id;
         localStorage.setItem('isLogged', '' + res.isSuccess);
-        localStorage.setItem('user',''+res.name);
+        localStorage.setItem('Id',''+res.id);
         this.router.navigateByUrl('/search')
       }
       else {
         this.notification = 'Tài khoản mật khẩu không chính xác';
-        alert("false")
       }
     })
   }
