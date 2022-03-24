@@ -2,42 +2,38 @@
     <div class="box" style="align-items: center; text-align: center;">
       <div>
         <div style="margin-bottom: 50PX; margin-top: -80px;" >
-            <h1>LOGIN</h1>
+            <h1>ĐĂNG NHẬP</h1>
         </div>
       <div>
       <form (ngSubmit)="login(formLogin);" #formLogin = "ngForm">
         <div class="d-flex flex-column">
           <div class="p-2 d-flex col">
             <div class="ml-auto p-2 col-4">
-              <label >User </label>
+              <label >Tài khoản </label>
             </div>
             <div class="mr-auto p-2 col-8">
-              <input class="form-control" placeholder="Username" #txtUserName="ngModel" [(ngModel)] = "userName" name="userName" required>
+              <input class="form-control" placeholder="Tài khoản" #txtUserName="ngModel" [(ngModel)] = "userName" name="userName" required>
             </div> 
           </div>
           <div class="text-danger">
-            <label *ngIf="txtUserName.touched && txtUserName.errors?.required">
+            <label *ngIf="txtUserName.touched && txtUserName.errors?.required && txtUserName">
               Không được để trống
             </label>
           </div>
           <div class="p-2 d-flex col">
             <div class="ml-auto p-2 col-4">
-              <label>Password</label>
+              <label>Mật khẩu</label>
             </div>
             <div class="mr-auto p-2 col-8">
-              <input class="form-control" placeholder="Password" type="password" #txtPassword = "ngModel" [(ngModel)] = "password" name="password" required>
+              <input class="form-control" placeholder="Mật khẩu" type="password" id="txtPassword" #txtPassword = "ngModel" [(ngModel)] = "password" name="password"  (blur)= "onPassBlur()" (ngModelChange)="onPassChange()" required>
             </div>
           </div>
-          <div class="text-danger">
-            <label *ngIf="txtPassword.touched && txtPassword.errors?.required">
-              Không được để trống
-            </label>
-          </div>
+
           <div>
-              <p class="text-danger" *ngIf="!txtPassword.errors?.required && !txtUserName.errors?.required">{{notification}}</p>
+              <p class="text-danger" *ngIf="notification">{{notification}}</p>
           </div>
         </div>
-            <button class="btn btn-primary" [disabled]="formLogin.invalid">Login</button> 
+            <button class="btn btn-primary" [disabled]="formLogin.invalid">Đăng nhập</button> 
       </form>
     </div>
   </div>

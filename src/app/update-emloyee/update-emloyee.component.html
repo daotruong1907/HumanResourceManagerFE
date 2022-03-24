@@ -3,7 +3,7 @@
     <form (ngSubmit)="update(formUpdate,mymodal);" #formUpdate = "ngForm">
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
-            <label>Họ tên:</label>
+            <label>Họ tên*:</label>
         </div>
         <div class="mr-auto p-2 col-8">
             <input class="form-control" type="text"  #txtName = "ngModel" [(ngModel)] ="paramUpdateEmployeeDto.name" name="name" maxlength="25" required>
@@ -16,7 +16,7 @@
     </div>
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
-            <label>Ngày sinh:</label>
+            <label>Ngày sinh*:</label>
         </div>
         <div class="mr-auto p-2 col-8">
             <input class="form-control" type="date" #txtBirthday="ngModel" [ngModel]="paramUpdateEmployeeDto.birthDay|date:'yyyy-MM-dd'" (ngModelChange)="validateDate(txtBirthday)" (blur)="validateDate(txtBirthday)" name="birthday" required>
@@ -41,7 +41,7 @@
     </div>
     <div class="p-2 d-flex col">
         <div class="ml-auto p-2 col-4">
-            <label>Số điện thoại:</label>
+            <label>Số điện thoại*:</label>
         </div>
         <div class="mr-auto p-2 col-8">
             <input class="form-control" type="tel" #txtPhoneNumber = "ngModel" [(ngModel)]="paramUpdateEmployeeDto.phoneNumber" maxlength="11" name="phonenumber" required>
@@ -96,7 +96,7 @@
       <label>{{modalConfirm?"Bạn có muốn sửa không?":addStatus?trueAdd:falseAdd}}</label>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')" *ngIf="modalConfirm">Close</button>
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')" *ngIf="modalConfirm">Hủy</button>
       <button type="button" class="btn btn-primary" (click)="modal.close()">Đồng ý</button>
     </div>
 </ng-template>

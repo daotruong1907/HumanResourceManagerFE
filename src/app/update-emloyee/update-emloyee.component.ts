@@ -42,7 +42,7 @@ export class UpdateEmloyeeComponent implements OnInit {
       id: 0,
       name: '',
       birthDay: undefined,
-      sex: 'male',
+      sex: 0,
       phoneNumber: '',
       email: '',
       repairerId: 0,

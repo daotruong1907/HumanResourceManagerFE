@@ -3,11 +3,11 @@
     <form (ngSubmit)="add(formAdd,mymodal);" #formAdd="ngForm">
         <div class="p-2 d-flex col">
             <div class="ml-auto p-2 col-4">
-                <label>Họ tên:</label>
+                <label>Họ tên*:</label>
             </div>
             <div class="mr-auto p-2 col-8">
                 <input class="form-control" type="text" #txtName="ngModel" [(ngModel)]="requestAddClass.name"
-                    name="name" maxlength="25" required>
+                    name="name" maxlength="25"  (blur)="onChangeForm()" required>
             </div>
         </div>
         <div class="text-danger">
@@ -17,11 +17,11 @@
         </div>
         <div class="p-2 d-flex col">
             <div class="ml-auto p-2 col-4">
-                <label>Ngày sinh:</label>
+                <label>Ngày sinh*:</label>
             </div>
             <div class="mr-auto p-2 col-8">
                 <input class="form-control" type="date" #txtBirthday="ngModel" [(ngModel)]="birthday"
-                    (ngModelChange)="validateDate()" (blur)="validateDate()" name="birthday" required>
+                    (ngModelChange)="validateDate()" (blur)="validateDate();onChangeForm()" name="birthday" required>
             </div>
         </div>
         <div class="text-danger">
@@ -34,7 +34,7 @@
                 <label>Giới tính:</label>
             </div>
             <div class="mr-auto p-2 col-8">
-                <select [(ngModel)]="requestAddClass.sex" name="sex">
+                <select [(ngModel)]="requestAddClass.sex" name="sex"  (blur)="onChangeForm()">
                     <option value=0>Nam</option>
                     <option value=1>Nữ</option>
                     <option value=2>Khác</option>
@@ -43,11 +43,11 @@
         </div>
         <div class="p-2 d-flex col">
             <div class="ml-auto p-2 col-4">
-                <label>Số điện thoại:</label>
+                <label>Số điện thoại*:</label>
             </div>
             <div class="mr-auto p-2 col-8">
                 <input class="form-control" type="tel" #txtPhoneNumber="ngModel"
-                    [(ngModel)]="requestAddClass.phoneNumber" maxlength="11" name="phonenumber" required>
+                    [(ngModel)]="requestAddClass.phoneNumber" maxlength="11" name="phonenumber"  (blur)="onChangeForm()" required>
             </div>
         </div>
         <div class="text-danger">
@@ -61,7 +61,7 @@
             </div>
             <div class="mr-auto p-2 col-8">
                 <input class="form-control" type="email" #txtEmail="ngModel" [(ngModel)]="requestAddClass.email" ngModel
-                    email="true" maxlength="35" name="email" required>
+                    email="true" maxlength="35" name="email"  (blur)="onChangeForm()" required>
             </div>
         </div>
         <div class="text-danger">
@@ -74,11 +74,11 @@
         </div>
         <div class="p-2 d-flex col">
             <div class="ml-auto p-2 col-4">
-                <label>Mật khẩu</label>
+                <label>Mật khẩu*</label>
             </div>
             <div class="mr-auto p-2 col-8">
                 <input class="form-control" type="password" #txtPassword="ngModel"
-                    [(ngModel)]="requestAddClass.password" name="password" maxlength="50" required>
+                    [(ngModel)]="requestAddClass.password" name="password" maxlength="50"  (blur)="onChangeForm()" required>
             </div>
         </div>
         <div class="text-danger">
@@ -88,11 +88,11 @@
         </div>
         <div class="p-2 d-flex col">
             <div class="ml-auto p-2 col-4">
-                <label>Nhập lại mật khẩu</label>
+                <label>Nhập lại mật khẩu*</label>
             </div>
             <div class="mr-auto p-2 col-8">
                 <input class="form-control" type="password" #txtRePassword="ngModel" [(ngModel)]="rePassword"
-                    name="rePassword" maxlength="50" required>
+                    name="rePassword" maxlength="50"  (blur)="onChangeForm()" required>
             </div>
         </div>
         <div class="text-danger">
@@ -102,13 +102,13 @@
             </label>
         </div>
         <div class="text-danger">
-            <label>
+            <label *ngIf="notification">
                 {{notification}}
             </label>
         </div>
         <div class="p-2 d-flex col">
             <div class="ml-auto p-2 col-3">
-                <button class="btn btn-primary" [disabled]="formAdd.invalid || txtRePassword.value != txtPassword.value||txtRePassword.errors?.required">Thêm</button>
+                <button class="btn btn-primary" [disabled]="formAdd.invalid || txtRePassword.value != txtPassword.value||txtRePassword.errors?.required||birthdayNote||notification">Thêm</button>
             </div>
             <div class="col-2"></div>
             <div class="mr-auto p-2 col-7">

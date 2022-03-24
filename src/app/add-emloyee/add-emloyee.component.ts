@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { RequestAddClass } from '../data/models/Request-add-class';
@@ -97,17 +98,18 @@ export class AddEmloyeeComponent implements OnInit {
   }
   add(formAdd: any, content: any) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${this.addEmployee(content)}`;
+      this.closeResult = `Closed with: ${this.addEmployee(formAdd, content)}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-      formAdd = '';
+     // formAdd = '';
       this.modalConfirm = true;
   }
   addStatus: boolean;
-  addEmployee(content?: any) {
+  addEmployee(formAdd:any, content?: any) {
     this.sv.add(this.requestAddClass).subscribe(res => {
       res.isSuccess ? this.addStatus = true : this.addStatus = false
+      if(res.isSuccess) this.onSubmit(formAdd)
       this.modalConfirm = false;
       this.notification = res.responseFromServer;
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -129,5 +131,12 @@ export class AddEmloyeeComponent implements OnInit {
   }
   redirectToMain() {
     this.router.navigateByUrl('/search');
+  }
+  onSubmit(formAdd:any):void {
+    //send some data to backend
+    formAdd.reset();
+  }
+  onChangeForm(){
+    this.notification='';
   }
 }

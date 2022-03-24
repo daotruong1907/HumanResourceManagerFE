@@ -8,6 +8,7 @@ import { PopupConfirmComponentComponent } from '../popup-confirm-component/popup
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from '../data/Service/common.service';
 import { PageServiceService } from '../data/Service/page-service.service';
+import { FormControl, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-search-emloyee',
@@ -25,11 +26,13 @@ export class SearchEmloyeeComponent implements OnInit {
   titlePage = 'Quản trị nhân viên'
   notification = ''
   trueSearch = true
-  eraserId ?:number
+  eraserId?: number
   content = false
-  arrEmployee: ResponseSearchEmployee[]
+  arrEmployee: ResponseSearchEmployee[] = [];
   p: number = 1;
-  count: number = 1;
+  count: number = 5;
+
+  @ViewChild('formSearch') form: NgForm;
 
   columns: { title: string, field: string, isButtonColumn?: boolean }[] = [
     { title: 'STT', field: '{{i+1}}', isButtonColumn: false },
@@ -47,7 +50,7 @@ export class SearchEmloyeeComponent implements OnInit {
 
   searchInterface: SearchInterface = {
     PageDto: {
-      ItemQuantityInPage: 10,
+      ItemQuantityInPage: 50,
       PageQuantity: 1
     },
     ParamSearchEmployee: {
@@ -72,12 +75,11 @@ export class SearchEmloyeeComponent implements OnInit {
     if (!this.commonSv.isLogged) {
       this.commonSv.redirectToLogin();
     }
-    if(this.commonSv.Id != null){
+    if (this.commonSv.Id != null) {
       this.eraserId = this.commonSv.Id;
     }
-    if(localStorage.getItem('Id') != null)
-    {
-      this.eraserId =Number.parseInt(localStorage.getItem('Id')||"0")|| undefined;
+    if (localStorage.getItem('Id') != null) {
+      this.eraserId = Number.parseInt(localStorage.getItem('Id') || "0") || undefined;
     }
   }
   search(formSearch: any) {
@@ -91,7 +93,7 @@ export class SearchEmloyeeComponent implements OnInit {
       // console.log(this.arrEmployee)
       if (emps.length == 0)
         this.notification = 'Không có nhân viên nào thỏa mãn'
-        this.trueSearch = true
+      this.trueSearch = true
       this.arrEmployee = emps;
     })
   }
@@ -106,7 +108,7 @@ export class SearchEmloyeeComponent implements OnInit {
 
   deletedStatus: boolean;
   deleteEmployee(id: number, content?: any) {
-    this.sv.delete(id,this.eraserId).subscribe(res => {
+    this.sv.delete(id, this.eraserId).subscribe(res => {
       this.deletedStatus = res;
       this.modalConfirm = false;
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-comfirm' }).result.then((result) => {
@@ -128,69 +130,122 @@ export class SearchEmloyeeComponent implements OnInit {
     }
   }
   isBirthDay = true
- 
-  validateDate(formSearch: any, fromDate?: any, toDate?: any, callAPI?:boolean) {
-    //fixme: check date nhap ab/cd/efss
-    let listResponse = []
+
+  validateDate(formSearch: NgForm, callAPI?: boolean, event?: Event) {
     let ok = true;
-    let now = new Date
-    if (fromDate || toDate) {
-      if (fromDate){
-        if(!fromDate.value && fromDate.touched)  {
-          listResponse.push('Từ ngày không đúng định dạng ngày')
-          this.isBirthDay = false
-          ok = false
-          this.trueSearch = false
-        }
-        fromDate = new Date(fromDate.value)
-        if(fromDate.value > now)
-        {
-          listResponse.push('Không thể nhập ngày lớn hơn ngày hiện tại')
-          this.isBirthDay = false
-          ok = false
-          this.trueSearch = false
-        }
-      } 
-     
-      if (toDate)
+    let listResponse = []
+    if (event) {
+      if (event.target) {
+        listResponse.push((event.target as HTMLInputElement).validationMessage);
+        ok = !this.notification;
+      }
+    }
+
+    if (ok) {
+  //      = new Date(toDate);
+      const fromDateValue = formSearch.controls['fromBirthday']?.value;
+      const toDateValue = formSearch.controls['toBirthday']?.value;
+      let now = new Date
+      if (fromDateValue)
       {
-        if(!toDate.value && toDate.touched) {
-          listResponse.push('Đến ngày không đúng định dạng ngày')
-          this.isBirthDay = false
-          ok = false
-          this.trueSearch = false
-        }
-        toDate = new Date(toDate.value)
-        if(toDate.value > now)
-        {
-          listResponse.push('Không thể nhập ngày lớn hơn ngày hiện tại')
-          this.isBirthDay = false
-          ok = false
-          this.trueSearch = false
+        this.searchInterface.ParamSearchEmployee.FromBirthDay = new Date(fromDateValue)
+        if (this.searchInterface.ParamSearchEmployee.FromBirthDay > now) {
+          listResponse.push('Từ ngày không thể lớn hơn ngày hiện tại')
+          ok = false;
         }
       }
-       
-      if(toDate && fromDate)
+      // if (!fromDateValue && formSearch.controls['fromBirthday']?.touched ){
+      //   listResponse.push('Từ ngày không đúng định dạng ngày')
+      //   ok = false;
+      // }
+      if (toDateValue)
       {
-        this.searchInterface.ParamSearchEmployee.FromBirthDay = new Date(fromDate);
-        this.searchInterface.ParamSearchEmployee.ToBirthDay = new Date(toDate);
-        if (this.searchInterface.ParamSearchEmployee.FromBirthDay > this.searchInterface.ParamSearchEmployee.ToBirthDay) {
+        this.searchInterface.ParamSearchEmployee.ToBirthDay = new Date(toDateValue)
+        if (this.searchInterface.ParamSearchEmployee.ToBirthDay > now) {
+          listResponse.push('Đến ngày không thể nhập ngày lớn hơn ngày hiện tại')
+          ok = false;
+        }
+      }
+      if (toDateValue && fromDateValue)
+      {
+        this.searchInterface.ParamSearchEmployee.FromBirthDay = new Date(fromDateValue)
+        this.searchInterface.ParamSearchEmployee.ToBirthDay = new Date(toDateValue)
+        if ( this.searchInterface.ParamSearchEmployee.FromBirthDay > this.searchInterface.ParamSearchEmployee.ToBirthDay) {
           listResponse.push('Từ ngày không thể lớn hơn đến ngày')
           ok = false;
-          this.trueSearch = false
-        }
-        if (this.searchInterface.ParamSearchEmployee.FromBirthDay >= now || this.searchInterface.ParamSearchEmployee.ToBirthDay >= now) {
-          listResponse.push('Không thể nhập ngày lớn hơn ngày hiện tại')
-          ok = false;
-          this.trueSearch = false
         }
       }
-      this.notification = listResponse.join(',')
-      if (callAPI) {
-        // Gọi api tìm kiếm
-        this.search(formSearch)
-      }
+    }
+    if (callAPI) {
+      // Gọi api tìm kiếm
+      this.search(formSearch)
     }
     this.notification = listResponse.join(',')
   }
+  onChangeForm(){
+    this.notification='';
+  }
+
+  //fixme: check date nhap ab/cd/efss
+  // let listResponse = []
+  // let ok = true;
+  // const fromDateValue = this.form.controls['fromBirthday']?.value;
+  // const endDateValue = this.form.controls['toBirthday']?.value;
+  // let now = new Date
+  // if (fromDate || toDate) {
+  //   if (fromDate) {
+  //     if (!fromDate.value) {
+  //       listResponse.push('Từ ngày không đúng định dạng ngày')
+  //       this.isBirthDay = false
+  //       ok = false
+  //       this.trueSearch = false
+  //     }
+  //     fromDate = new Date(fromDate.value)
+  //     if (fromDate.value > now) {
+  //       listResponse.push('Không thể nhập ngày lớn hơn ngày hiện tại')
+  //       this.isBirthDay = false
+  //       ok = false
+  //       this.trueSearch = false
+  //     }
+  //   }
+
+  //   if (toDate) {
+  //     if (!toDate.value && toDate.touched) {
+  //       listResponse.push('Đến ngày không đúng định dạng ngày')
+  //       this.isBirthDay = false
+  //       ok = false
+  //       this.trueSearch = false
+  //     }
+  //     toDate = new Date(toDate.value)
+  //     if (toDate.value > now) {
+  //       listResponse.push('Không thể nhập ngày lớn hơn ngày hiện tại')
+  //       this.isBirthDay = false
+  //       ok = false
+  //       this.trueSearch = false
+  //     }
+  //   }
+
+  //   if (toDate && fromDate) {
+  //     this.searchInterface.ParamSearchEmployee.FromBirthDay = new Date(fromDate);
+  //     this.searchInterface.ParamSearchEmployee.ToBirthDay = new Date(toDate);
+  //     if (this.searchInterface.ParamSearchEmployee.FromBirthDay > this.searchInterface.ParamSearchEmployee.ToBirthDay) {
+  //       listResponse.push('Từ ngày không thể lớn hơn đến ngày')
+  //       ok = false;
+  //       this.trueSearch = false
+  //     }
+  //     if (this.searchInterface.ParamSearchEmployee.FromBirthDay >= now || this.searchInterface.ParamSearchEmployee.ToBirthDay >= now) {
+  //       listResponse.push('Không thể nhập ngày lớn hơn ngày hiện tại')
+  //       ok = false;
+  //       this.trueSearch = false
+  //     }
+  //   }
+  //   if (callAPI) {
+  //     // Gọi api tìm kiếm
+  //     this.search(formSearch)
+  //   }
+  //   this.notification = listResponse.join(',')
+  // }
+  // else {
+  //   this.notification = '';
+  // }
 }

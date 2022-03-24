@@ -14,11 +14,24 @@ export class LoginComponent implements OnInit {
   notification: string = ''
   userName: string = ''
   password: string = ''
-
+  passError:string = ''
   loginModel: LoginInterface = {
     "userName": "", "password": ""
   }
   ngOnInit(): void {
+  }
+  onPassBlur()
+  {
+    if(!this.password)
+    {
+      this.notification = 'Không được để trống'
+    }
+    else{
+      this.notification=''
+    }
+  }
+  onPassChange(){
+    this.notification='';
   }
   login(formLogin: any) {
     this.loginModel.userName = formLogin.value.userName
@@ -32,7 +45,10 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/search')
       }
       else {
-        this.notification = 'Tài khoản mật khẩu không chính xác';
+        this.notification = res.responseFromServer;
+        this.password = ''
+        let txtpass = document.getElementById('txtPassword')
+        txtpass?.focus();
       }
     })
   }

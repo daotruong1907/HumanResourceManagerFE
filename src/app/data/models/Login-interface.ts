@@ -5,4 +5,5 @@ export class LoginInterface {
 export class Responselogin {
     id:number
     isSuccess:boolean
+    responseFromServer:string
 }

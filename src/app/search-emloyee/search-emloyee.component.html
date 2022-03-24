@@ -1,6 +1,6 @@
 <app-header-page [titlePage]="titlePage"></app-header-page>
 <div>
-    <form (ngSubmit)="search(formSearch);" #formSearch="ngForm">
+    <form (ngSubmit)="validateDate(formSearch,true)" #formSearch="ngForm">
         <div class="d-flex">
             <div class="p-2 d-flex">
                 <div class="ml-auto p-2">
@@ -8,8 +8,7 @@
                 </div>
                 <div class="mr-auto p-2">
                     <input class="form-control" type="date" #txtFromBirthday="ngModel" [ngModel]="fromBirthday"
-                        (ngModelChange)="validateDate(formSearch,txtFromBirthday,txtToBirthday)"
-                        (blur)="validateDate(formSearch,txtFromBirthday,txtToBirthday)" name="fromBirthday" required>
+                        (blur)="validateDate(formSearch,false, $event)" name="fromBirthday">
                 </div>
             </div>
 
@@ -19,8 +18,7 @@
                 </div>
                 <div class="mr-auto p-2">
                     <input class="form-control" type="date" #txtToBirthday="ngModel" [ngModel]="toBirthday"
-                        (ngModelChange)="validateDate(formSearch,txtFromBirthday,txtToBirthday)"
-                        (blur)="validateDate(formSearch,txtFromBirthday,txtToBirthday)" name="toBirthday" required>
+                        (blur)="validateDate(formSearch,false, $event)" name="toBirthday">
                 </div>
             </div>
             <div class="ml-auto p-2 d-flex">
@@ -50,12 +48,12 @@
                 </div>
                 <div class="mr-auto p-2">
                     <input class="form-control" type="text" placeholder="Tìm theo Email, Họ tên"
-                        #txtNameOrEmail="ngModel" [(ngModel)]="searchInterface.ParamSearchEmployee.NameOrEmail"
+                        #txtNameOrEmail="ngModel" [(ngModel)]="searchInterface.ParamSearchEmployee.NameOrEmail" (ngModelChange)="onChangeForm()"
                         name="nameOrEmail" required>
                 </div>
             </div>
             <div class="p-2">
-                <button class="btn btn-primary" [disabled]="notification && !trueSearch" (click)="validateDate(formSearch,true)"
+                <button class="btn btn-primary" [disabled]="notification"
                     type="submit">Tìm</button>
             </div>
             <div class="p-2">
@@ -63,7 +61,10 @@
             </div>
         </div>
     </form>
-    <label *ngIf="notification" class="text-danger">{{notification}}</label>
+    <div color="black">
+        <label *ngIf="notification" class="text-danger">{{notification}}</label>
+    </div>
+
     <table class="table table-bordered text-center">
         <thead class="thead-light">
             <tr class="text">
@@ -76,7 +77,8 @@
                 <th scope="col">Sửa</th>
                 <th scope="col">Xóa</th>
             </tr>
-            <tr *ngFor="let employee of arrEmployee | paginate: { itemsPerPage: count, currentPage: p } ; index as i " class="text">
+            <tr *ngFor="let employee of arrEmployee | paginate: { itemsPerPage: count, currentPage: p } ; index as i "
+                class="text">
                 <th scope="col">{{i+1}}</th>
                 <th scope="col">{{employee.name}}</th>
                 <th scope="col">{{employee.birthDay|date:'dd-MM-yyyy'}}</th>
@@ -91,8 +93,8 @@
     </table>
     <div class="text-center">
         <pagination-controls *ngIf="arrEmployee.length > 0" (pageChange)="p = $event"></pagination-controls>
-      </div>
-    
+    </div>
+
     <ng-template #mymodal let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Thông báo</h4>
@@ -105,7 +107,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')"
-                *ngIf="modalConfirm">Close</button>
+                *ngIf="modalConfirm">Hủy</button>
             <button type="button" class="btn btn-danger" (click)="modal.close()">Đồng ý</button>
         </div>
     </ng-template>
